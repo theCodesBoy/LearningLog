@@ -1,0 +1,41 @@
+{% extends "learning_logs/base.html" %}
+
+{% block header %}
+    <h1>Topics</h1>
+{% endblock header %}
+
+{% block content %}
+
+  <ul>
+    {% for topic in topics %}
+      <li>
+        <h3>
+          <a href="{% url 'learning_logs:topic' topic.id %}">{{topic}}</a>
+          <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                        <li><a>Hello, {{ user.username }}.</a></li>
+                        <li><a href="{% url 'users:logout' %}">log out</a></li>
+                    {% else %}
+                        <li><a href="{% url 'users:register' %}">register</a></li>
+                        <li><a href="{% url 'users:login' %}">log in</a></li>
+                    {% endif %}
+              <form action="{% url 'learning_logs:toggle_public' topic.id %}" method="post">
+                {% csrf_token %}
+                  <li>
+
+                  </li>
+
+                <input type="checkbox" name="public" {% if topic.public %}checked{% endif %}>
+        </form>
+          </ul>
+        </h3>
+
+      </li>
+    {% empty %}
+      <li>No topics have been added yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h3><a href="{% url 'learning_logs:new_topic' %}">Add a new topic:</a></h3>
+
+{% endblock content %}
